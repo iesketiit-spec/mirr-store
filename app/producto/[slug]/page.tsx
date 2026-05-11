@@ -290,6 +290,7 @@ export default function ProductPage() {
                 <motion.button
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
+                  onClick={handleAddToCart}
                   className="w-full py-4 bg-transparent border border-foreground/30 text-foreground font-sans text-sm tracking-[0.15em] uppercase hover:bg-foreground/5 hover:border-foreground/50 transition-all"
                 >
                   Comprar ahora
