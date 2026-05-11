@@ -39,9 +39,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es" className={`${oswald.variable} ${inter.variable} bg-background`}>
-      <body className="font-serif antialiased">
-        <div className="grain-overlay" />
+    <html lang="es" className={`${oswald.variable} ${inter.variable} bg-background`} suppressHydrationWarning>
+      <body className="font-serif antialiased overflow-x-hidden">
+        <div className="grain-overlay" aria-hidden="true" />
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

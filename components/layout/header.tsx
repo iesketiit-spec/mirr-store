@@ -198,9 +198,10 @@ export function Header() {
                       className="flex items-center justify-between px-6 py-4 text-lg tracking-[0.15em] uppercase text-foreground/80 hover:text-foreground hover:bg-secondary/30 transition-colors border-b border-border/30"
                     >
                       <div className="flex items-center gap-4">
-                        {mobileNavIcons[index] && (
-                          <mobileNavIcons[index].icon className="h-5 w-5 text-muted-foreground" />
-                        )}
+                        {mobileNavIcons[index] && (() => {
+                          const IconComponent = mobileNavIcons[index].icon
+                          return <IconComponent className="h-5 w-5 text-muted-foreground" />
+                        })()}
                         <span>{link.label}</span>
                       </div>
                       <ChevronRight className="h-5 w-5 text-muted-foreground" />
