@@ -71,30 +71,22 @@ export default function ProductPage() {
   }).format(product.price)
 
   const handleAddToCart = () => {
-  const cartItem = {
-    ...product,
-    color: selectedColor,
-    size: selectedSize,
-    quantity,
-  }
-
-  const existingCart = JSON.parse(localStorage.getItem("mirr-cart") || "[]")
-  const updatedCart = [...existingCart, cartItem]
-
-  localStorage.setItem("mirr-cart", JSON.stringify(updatedCart))
-  window.location.href = "/carrito"
-}
     if (!selectedSize) {
       alert("Por favor selecciona una talla")
       return
     }
-    // Add to cart logic
-    console.log("Added to cart:", {
-      product: product.name,
+    const cartItem = {
+      ...product,
       color: selectedColor,
       size: selectedSize,
       quantity,
-    })
+    }
+    if (typeof window !== "undefined") {
+      const existingCart = JSON.parse(localStorage.getItem("mirr-cart") || "[]")
+      const updatedCart = [...existingCart, cartItem]
+      localStorage.setItem("mirr-cart", JSON.stringify(updatedCart))
+      window.location.href = "/carrito"
+    }
   }
 
   return (
