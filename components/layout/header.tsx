@@ -63,7 +63,7 @@ export function Header() {
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-9 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
             ? "bg-background/80 backdrop-blur-xl border-b border-border/30 py-3"
             : "bg-transparent py-4 lg:py-6"
@@ -77,7 +77,7 @@ export function Header() {
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 400 }}
               >
-                <MirrLogo className="h-8 lg:h-10 w-auto" />
+                <MirrLogo className="h-12 lg:h-14 w-auto" />
               </motion.div>
             </Link>
 
@@ -179,7 +179,7 @@ export function Header() {
               <div className="flex flex-col h-full">
                 {/* Mobile Menu Header */}
                 <div className="flex items-center justify-between p-6 border-b border-border">
-                  <MirrLogo className="h-8 w-auto" />
+                  <MirrLogo className="h-12 w-auto" />
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="text-foreground/80 hover:text-foreground"
