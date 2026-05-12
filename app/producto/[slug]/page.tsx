@@ -17,10 +17,9 @@ const product = {
   currency: "COP",
   description: "Hoodie oversize en algodón pesado de 420 GSM. Estampado frontal MIRR en tipografía gótica. Gráficos en mangas y espalda. Edición limitada.",
   images: [
-    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/f075a691-5216-446f-90b4-e0295d6df6c5.jpeg",
-    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1b58c61b-559d-4f87-b870-55a051b9d511.jpeg",
-    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/d113971e-e45b-40e9-a960-80b91af0a30f.jpeg",
-    "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/9cfd7b20-15f6-4dd6-8c4d-0d20ff5cc48d.jpeg",
+    "/hoodie-gothic-1.jpeg",
+    "/hoodie-gothic-2.jpeg",
+    "/hoodie-gothic-3.jpeg",
   ],
   colors: [
     { id: "white", name: "Blanco", hex: "#ffffff" },
