@@ -53,7 +53,7 @@ export function Hero() {
           className="absolute inset-[-20px]"
         >
           <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1b58c61b-559d-4f87-b870-55a051b9d511.jpeg"
+            src="/hoodie-gothic-3.jpeg"
             alt="MIRR Streetwear"
             fill
             className="object-cover object-center"
