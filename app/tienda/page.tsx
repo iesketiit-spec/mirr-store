@@ -39,7 +39,7 @@ const products: Product[] = [
     name: "Hoodie Gothic",
     price: 175000,
     currency: "COP",
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/f075a691-5216-446f-90b4-e0295d6df6c5.jpeg",
+    image: "/hoodie-gothic-1.jpeg",
     sizes: ["S", "M", "L", "XL"],
     isNew: true,
     slug: "hoodie-gothic",
