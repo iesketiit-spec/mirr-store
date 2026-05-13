@@ -1,62 +1,25 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { motion } from "framer-motion"
 import { TopBar } from "@/components/layout/top-bar"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { WhatsAppButton } from "@/components/ui/whatsapp-button"
-import { MirrLogo } from "@/components/ui/mirr-logo"
-import { Flame, Globe, Crown } from "lucide-react"
 
 const values = [
-  {
-    icon: () => <StarIcon className="h-8 w-8" />,
-    title: "Identidad",
-    description: "Cada pieza refleja quiénes somos y de dónde venimos. Orgullosos de nuestra cultura, nuestras raíces y nuestra gente.",
-  },
-  {
-    icon: Flame,
-    title: "Actitud",
-    description: "No seguimos tendencias, las creamos. MIRR es para los que se atreven a ser ellos mismos.",
-  },
-  {
-    icon: Globe,
-    title: "Visión Global",
-    description: "De Medellín para el mundo. Llevamos nuestra esencia a cada rincón, conectando culturas a través del streetwear.",
-  },
-  {
-    icon: Crown,
-    title: "Exclusividad",
-    description: "Ediciones limitadas. Piezas únicas. No es para todos, es para los que entienden.",
-  },
+  { icon: "✦", title: "Identidad", text: "Cada pieza refleja quiénes somos y de dónde venimos. Orgullosos de nuestra cultura, nuestras raíces y nuestra gente." },
+  { icon: "🔥", title: "Actitud", text: "No seguimos tendencias, las creamos. MIRR es para los que se atreven a ser ellos mismos." },
+  { icon: "🌍", title: "Visión Global", text: "De Medellín para el mundo. Llevamos nuestra esencia a cada rincón, conectando culturas a través del streetwear." },
+  { icon: "♛", title: "Exclusividad", text: "Ediciones limitadas. Piezas únicas. No es para todos, es para los que entienden." },
 ]
 
 const timeline = [
-  {
-    year: "2020",
-    number: "01",
-    title: "El inicio",
-    description: "Una idea, una pasión y muchas ganas de hacer algo diferente.",
-  },
-  {
-    year: "2021",
-    number: "02",
-    title: "Primeras piezas",
-    description: "Lanzamos nuestras primeras colecciones limitadas. El movimiento comenzó.",
-  },
-  {
-    year: "2022-2023",
-    number: "03",
-    title: "Crecemos",
-    description: "Más personas, más ciudades, más historias. MIRR se hace global.",
-  },
-  {
-    year: "∞",
-    number: "04",
-    title: "El futuro",
-    description: "Seguimos creando, rompiendo y dejando huella.",
-  },
+  { num: "01", year: "El inicio · 2020", title: "El Inicio", text: "Una idea, una pasión y muchas ganas de hacer algo diferente." },
+  { num: "02", year: "Primeras piezas · 2021", title: "Primeras Piezas", text: "Lanzamos nuestras primeras colecciones limitadas. El movimiento comenzó." },
+  { num: "03", year: "Crecemos · 2022-2023", title: "Crecemos", text: "Más personas, más ciudades, más historias. MIRR se hace global." },
+  { num: "04", year: "El futuro · ∞", title: "El Futuro", text: "Seguimos creando, rompiendo y dejando huella." },
 ]
 
 export default function SobreMirrPage() {
@@ -65,217 +28,104 @@ export default function SobreMirrPage() {
       <TopBar />
       <Header />
 
-      {/* Hero Section */}
-      <section className="relative pt-24 lg:pt-32 overflow-hidden">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            {/* Content */}
-            <div className="py-12 lg:py-24">
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-accent text-xs tracking-[0.3em] uppercase mb-4"
-              >
-                Sobre MIRR
-              </motion.p>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="font-sans text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-foreground mb-2"
-              >
-                MÁS QUE ROPA,
-              </motion.h1>
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                className="font-sans text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight mb-6"
-              >
-                ES <span className="text-accent">ACTITUD.</span>
-              </motion.h1>
-
-              {/* Decorative Line */}
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className="flex items-center gap-4 mb-8"
-              >
-                <div className="flex-1 h-px bg-border" />
-                <StarIcon className="h-4 w-4 text-foreground/30" />
-                <div className="flex-1 h-px bg-border" />
-              </motion.div>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-muted-foreground text-base lg:text-lg leading-relaxed mb-4"
-              >
-                MIRR nace en Medellín, una ciudad que inspira, que crea y que nunca se detiene. Diseñamos para los que rompen las reglas, para los que viven el streetwear con identidad y sin miedo a ser diferentes.
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="font-sans text-lg lg:text-xl font-bold tracking-tight text-foreground mb-4"
-              >
-                DISEÑADO EN MEDELLÍN. HECHO PARA <span className="text-accent">DESTACAR.</span>
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-              >
-                <MirrLogo className="h-10 w-auto" />
-              </motion.div>
+      {/* HERO */}
+      <section className="relative min-h-screen grid grid-cols-1 lg:grid-cols-2 pt-24 lg:pt-0">
+        {/* Left */}
+        <div className="relative z-10 flex flex-col justify-center px-6 lg:px-16 py-16 lg:pt-40">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+            <p className="text-xs tracking-widest text-red-500 uppercase mb-4">Sobre MIRR</p>
+            <h1 className="font-display text-5xl lg:text-7xl leading-[0.9] mb-6">
+              Más que ropa,<br />es <span className="text-red-500">Actitud.</span>
+            </h1>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-px bg-foreground/10 flex-1" />
+              <span className="text-foreground/25">✦</span>
+              <div className="h-px bg-foreground/10 w-16" />
             </div>
+            <p className="text-sm text-foreground/55 leading-relaxed mb-3 max-w-sm">
+              MIRR nace en Medellín, una ciudad que inspira, que crea y que nunca se detiene.
+            </p>
+            <p className="text-sm text-foreground/55 leading-relaxed mb-3 max-w-sm">
+              Diseñamos para los que rompen las reglas, para los que viven el streetwear con identidad y sin miedo a ser diferentes.
+            </p>
+            <p className="text-xs font-bold tracking-widest uppercase mb-6">
+              Diseñado en Medellín. Hecho para <span className="text-red-500">Destacar.</span>
+            </p>
+            <Image src="/logo.svg" alt="MIRR" width={90} height={30} className="opacity-60 mb-8" />
+            <Link href="/tienda" className="inline-flex items-center gap-2 bg-white text-black px-6 py-3.5 text-xs font-bold tracking-widest uppercase hover:bg-red-600 hover:text-white transition-all">
+              Ver colección ▷
+            </Link>
+          </motion.div>
+        </div>
+        {/* Right image */}
+        <div className="relative min-h-[50vh] lg:min-h-screen overflow-hidden">
+          <Image src="/hoodie-gothic-3.jpeg" alt="Sobre MIRR" fill className="object-cover object-top" />
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent to-background/20 lg:bg-none" />
+        </div>
+      </section>
 
-            {/* Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-              className="relative aspect-[4/5] lg:aspect-auto lg:h-[700px]"
-            >
-              <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/9944d68f-de01-4265-b9a5-ae70ffbb2a7c.jpeg"
-                alt="Sobre MIRR"
-                fill
-                className="object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-background/50 lg:hidden" />
-            </motion.div>
+      {/* VALUES */}
+      <section className="bg-card/20 py-16 lg:py-24 px-6 lg:px-16">
+        <div className="flex gap-8 lg:gap-16 items-start">
+          <p className="writing-mode-vertical text-[9px] tracking-widest text-foreground/20 uppercase hidden lg:block" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+            Nuestra Esencia
+          </p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 flex-1">
+            {values.map((v, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.12 }} viewport={{ once: true }}
+                className="flex flex-col items-center text-center gap-4">
+                <div className="w-14 h-14 rounded-full border border-red-600 flex items-center justify-center text-xl text-red-500">
+                  {v.icon}
+                </div>
+                <p className="text-xs font-bold tracking-widest uppercase">{v.title}</p>
+                <p className="text-xs text-foreground/45 leading-relaxed">{v.text}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="py-16 lg:py-24 border-y border-border">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="flex items-center gap-4 mb-12">
-            <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground rotate-180 [writing-mode:vertical-lr]">
-              Nuestra Esencia
-            </span>
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {values.map((value, index) => (
-                <motion.div
-                  key={value.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-center p-6 lg:p-8"
-                >
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-border mb-4">
-                    <value.icon className="h-8 w-8 text-foreground" />
-                  </div>
-                  <h3 className="font-sans text-lg font-bold tracking-wider uppercase text-foreground mb-3">
-                    {value.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {value.description}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+      {/* TIMELINE */}
+      <section className="py-16 lg:py-24 px-6 lg:px-16">
+        <div className="mb-12">
+          <p className="text-xs tracking-widest text-red-500 uppercase mb-3">Nuestra Historia</p>
+          <h2 className="font-display text-4xl lg:text-6xl leading-[0.9] mb-6">
+            Desde siempre.<br />Para <span className="text-red-500">siempre.</span>
+          </h2>
+          <p className="text-sm text-foreground/50 leading-relaxed max-w-md">
+            MIRR comenzó como una idea entre amigos, con un sueño claro: crear ropa que representara nuestra forma de ver y vivir el mundo. Hoy, seguimos con la misma misión, pero con una comunidad que no para de crecer.
+          </p>
         </div>
-      </section>
-
-      {/* Timeline Section */}
-      <section className="py-16 lg:py-24">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
-            {/* Header */}
-            <div>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-accent text-xs tracking-[0.3em] uppercase mb-4"
-              >
-                Nuestra Historia
-              </motion.p>
-              <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="font-sans text-3xl lg:text-4xl font-bold tracking-tight text-foreground mb-2"
-              >
-                DESDE SIEMPRE.
-              </motion.h2>
-              <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.15 }}
-                className="font-sans text-3xl lg:text-4xl font-bold tracking-tight"
-              >
-                PARA <span className="text-accent">SIEMPRE.</span>
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="text-muted-foreground text-base leading-relaxed mt-6"
-              >
-                MIRR comenzó como una idea entre amigos, con un sueño claro: crear ropa que representara nuestra forma de ver y vivir el mundo. Hoy, seguimos con la misma misión, pero con una comunidad que no para de crecer.
-              </motion.p>
-            </div>
-
-            {/* Timeline */}
-            <div className="lg:col-span-2">
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                {timeline.map((item, index) => (
-                  <motion.div
-                    key={item.number}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    className="relative"
-                  >
-                    <div className="flex items-center gap-2 mb-4">
-                      <span className="text-accent text-2xl font-bold">{item.number}</span>
-                      {index < timeline.length - 1 && (
-                        <div className="hidden lg:block flex-1 h-px bg-border" />
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <StarIcon className="h-3 w-3 text-foreground/30" />
-                    </div>
-                    <h3 className="font-sans text-base font-bold tracking-wider uppercase text-foreground mb-1">
-                      {item.title}
-                    </h3>
-                    <p className="text-accent text-sm font-semibold mb-2">{item.year}</p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {item.description}
-                    </p>
-                  </motion.div>
-                ))}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          {timeline.map((t, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} viewport={{ once: true }}>
+              <p className="text-xs font-bold tracking-widest text-foreground/20 mb-3">{t.num}</p>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-foreground/20 text-xs">✦</span>
+                <div className="flex-1 h-px bg-foreground/10" />
               </div>
-            </div>
-          </div>
+              <p className="text-[10px] tracking-widest text-red-500 uppercase mb-2">{t.year}</p>
+              <p className="text-sm font-bold tracking-widest uppercase mb-2">{t.title}</p>
+              <p className="text-xs text-foreground/40 leading-relaxed">{t.text}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="relative py-24 overflow-hidden">
+        <Image src="/tee-gothic-group.jpeg" alt="MIRR" fill className="object-cover opacity-30" />
+        <div className="absolute inset-0 bg-background/70" />
+        <div className="relative z-10 text-center px-6">
+          <h2 className="font-display text-4xl lg:text-7xl mb-6">¿Listo para ser parte<br />del movimiento?</h2>
+          <Link href="/tienda" className="inline-flex items-center gap-2 bg-white text-black px-8 py-4 text-xs font-bold tracking-widest uppercase hover:bg-red-600 hover:text-white transition-all">
+            Ver colección completa →
+          </Link>
         </div>
       </section>
 
       <Footer />
       <WhatsAppButton />
     </main>
-  )
-}
-
-function StarIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-      <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
-    </svg>
   )
 }
