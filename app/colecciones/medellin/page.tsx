@@ -3,81 +3,22 @@
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ChevronRight, ChevronDown, Play } from "lucide-react"
 import { TopBar } from "@/components/layout/top-bar"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { WhatsAppButton } from "@/components/ui/whatsapp-button"
-import { ProductCard, type Product } from "@/components/ui/product-card"
-import { BenefitsBar } from "@/components/sections/benefits-bar"
 
-const collectionProducts: Product[] = [
-  {
-    id: "m1",
-    name: "Hoodie Medellín",
-    price: 175000,
-    currency: "COP",
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/f075a691-5216-446f-90b4-e0295d6df6c5.jpeg",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    isNew: true,
-    slug: "hoodie-medellin",
-  },
-  {
-    id: "m2",
-    name: "Hoodie Back Print",
-    price: 175000,
-    currency: "COP",
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1b58c61b-559d-4f87-b870-55a051b9d511.jpeg",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    isNew: true,
-    slug: "hoodie-back-print",
-  },
-  {
-    id: "m3",
-    name: "Tee Medellín",
-    price: 95000,
-    currency: "COP",
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/d113971e-e45b-40e9-a960-80b91af0a30f.jpeg",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    isNew: true,
-    slug: "tee-medellin",
-  },
-  {
-    id: "m4",
-    name: "Pants Medellín",
-    price: 165000,
-    currency: "COP",
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/b15be1fa-46e9-408c-ac33-838e237b0246.jpeg",
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    isNew: true,
-    slug: "pants-medellin",
-  },
-  {
-    id: "m5",
-    name: "Cap Medellín",
-    price: 80000,
-    currency: "COP",
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/9944d68f-de01-4265-b9a5-ae70ffbb2a7c.jpeg",
-    sizes: ["Única"],
-    isNew: true,
-    slug: "cap-medellin",
-  },
-  {
-    id: "m6",
-    name: "Sticker Pack",
-    price: 20000,
-    currency: "COP",
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bf809cf9-4aba-470f-b41b-a4145a2d8538.jpeg",
-    sizes: ["Única"],
-    isNew: false,
-    slug: "sticker-pack-medellin",
-  },
-]
-
-const sortOptions = [
-  { id: "newest", name: "Más recientes" },
-  { id: "price-asc", name: "Precio: menor a mayor" },
-  { id: "price-desc", name: "Precio: mayor a menor" },
+const products = [
+  { slug: "tee-medellin", name: "Tee Medellín", price: 18, image: "/tee-medellin.jpeg", sizes: ["S","M","L","XL"] },
+  { slug: "tee-the-end", name: "Tee The End", price: 15, image: "/tee-the-end.jpeg", sizes: ["S","M","L","XL"] },
+  { slug: "tee-sell-drugs-buy-art", name: "Tee Sell Drugs Buy Art", price: 15, image: "/tee-sell-drugs.jpeg", sizes: ["S","M","L","XL"] },
+  { slug: "tee-mirr-vision", name: "Tee MIRR Vision", price: 15, image: "/tee-mirr-vision.jpeg", sizes: ["S","M","L","XL"] },
+  { slug: "tee-barrio-antioquia", name: "Tee Barrio Antioquia", price: 20, image: "/tee-antioquia.jpeg", sizes: ["S","M","L","XL"] },
+  { slug: "tee-barrio-maanrrique", name: "Tee Barrio Maanrrique", price: 20, image: "/tee-maanrrique.jpeg", sizes: ["S","M","L","XL"] },
+  { slug: "tee-barrio-laureles", name: "Tee Barrio Laureles", price: 20, image: "/tee-laureles.jpeg", sizes: ["S","M","L","XL"] },
+  { slug: "tee-barrio-poblado", name: "Tee Barrio Poblado", price: 20, image: "/tee-poblado.jpeg", sizes: ["S","M","L","XL"] },
+  { slug: "conjunto-urban-medellin", name: "Conjunto Urban Medellín", price: 70, image: "/conjunto-urban-medellin.jpeg", sizes: ["S","M","L","XL"] },
+  { slug: "pantalon-sudadera-medellin", name: "Pantalón Sudadera Medellín", price: 35, image: "/pantalon-medellin.jpeg", sizes: ["S","M","L","XL","XXL"] },
 ]
 
 export default function MedellinCollectionPage() {
@@ -86,159 +27,94 @@ export default function MedellinCollectionPage() {
       <TopBar />
       <Header />
 
-      {/* Breadcrumb */}
-      <nav className="pt-24 lg:pt-28 pb-4">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
-              Inicio
-            </Link>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-            <Link href="/colecciones" className="text-muted-foreground hover:text-foreground transition-colors">
-              Colecciones
-            </Link>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-            <span className="text-accent font-semibold tracking-wider uppercase">
-              Medellín Collection
-            </span>
-          </div>
+      {/* HERO */}
+      <section className="relative h-[85vh] min-h-[580px] flex items-center overflow-hidden">
+        <div className="absolute inset-0">
+          <Image src="/hoodie-gothic-3.jpeg" alt="Medellín Collection" fill className="object-cover object-top" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
         </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-            {/* Content */}
-            <div className="py-8 lg:py-16">
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-accent text-xs tracking-[0.3em] uppercase mb-4"
-              >
-                Colección 2026
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="flex items-center gap-3 mb-4"
-              >
-                <StarDecoration className="h-5 w-5 text-foreground" />
-                <h1 className="font-sans text-5xl lg:text-7xl font-bold tracking-tight text-foreground">
-                  MEDELLÍN
-                </h1>
-                <StarDecoration className="h-5 w-5 text-foreground" />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="flex items-center gap-3 mb-6"
-              >
-                <span className="font-sans text-2xl italic text-foreground/80">MIRR</span>
-                <StarIcon className="h-6 w-6 text-accent" />
-              </motion.div>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-muted-foreground text-base lg:text-lg leading-relaxed mb-8 max-w-md"
-              >
-                Inspirada en las calles de Medellín. Cada pieza es un homenaje a la cultura, al barrio y a nuestra esencia.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-              >
-                <Link href="/lookbook/medellin">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="group flex items-center gap-3 px-8 py-4 bg-transparent border border-foreground/30 text-foreground font-sans text-sm tracking-[0.15em] uppercase hover:bg-foreground/5 hover:border-foreground/50 transition-all"
-                  >
-                    Ver Lookbook
-                    <Play className="h-4 w-4" />
-                  </motion.button>
-                </Link>
-              </motion.div>
+        <div className="relative z-10 px-6 lg:px-16 max-w-2xl pt-24">
+          {/* Breadcrumb */}
+          <p className="text-[10px] tracking-widest text-foreground/30 uppercase mb-6 flex items-center gap-2">
+            <Link href="/" className="hover:text-foreground transition-colors">Inicio</Link>
+            <span>›</span>
+            <Link href="/colecciones" className="hover:text-foreground transition-colors">Colecciones</Link>
+            <span>›</span>
+            <span className="text-red-500">Medellín Collection</span>
+          </p>
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+            <p className="text-xs tracking-widest text-red-500 uppercase mb-3 flex items-center gap-2">
+              <span>✦</span> <span>✦</span> Colección 2026
+            </p>
+            <h1 className="font-display text-7xl lg:text-[10rem] leading-[0.85] tracking-wide mb-4">MEDELLÍN</h1>
+            <div className="flex items-center gap-3 mb-4">
+              <Image src="/logo.svg" alt="MIRR" width={100} height={33} className="opacity-80" />
+              <span className="text-red-500 text-2xl">✸</span>
             </div>
+            <p className="text-sm text-foreground/55 max-w-xs leading-relaxed mb-6 text-center">
+              Inspirada en las calles de Medellín. Cada pieza es un homenaje a la cultura, al barrio y a nuestra esencia.
+            </p>
+            <Link href="/lookbook" className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3.5 text-xs font-bold tracking-widest uppercase hover:border-white transition-all">
+              Ver Lookbook ▷
+            </Link>
+          </motion.div>
+        </div>
+      </section>
 
-            {/* Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="relative aspect-[4/5] lg:aspect-auto lg:h-[600px]"
-            >
-              <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/d113971e-e45b-40e9-a960-80b91af0a30f.jpeg"
-                alt="Medellín Collection"
-                fill
-                className="object-cover object-center"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-background/30" />
+      {/* PRODUCTS */}
+      <section className="py-6">
+        <div className="flex justify-between items-center px-6 lg:px-16 py-4 border-b border-border/20 mb-0">
+          <p className="font-display text-xl tracking-wider">Piezas de la colección</p>
+          <p className="text-xs tracking-widest text-foreground/30 uppercase">{products.length} productos</p>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-px bg-border/20">
+          {products.map((p, i) => (
+            <motion.div key={p.slug} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: i * 0.05 }} viewport={{ once: true }}
+              className="bg-background group relative overflow-hidden">
+              <Link href={`/producto/${p.slug}`}>
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  <Image src={p.image} alt={p.name} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <span className="absolute top-3 left-3 bg-red-600 text-white text-[9px] tracking-widest px-2 py-1 font-bold uppercase">Nuevo</span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                    <span className="w-full bg-white text-black text-[10px] tracking-widest uppercase py-2.5 font-bold text-center">Ver producto →</span>
+                  </div>
+                </div>
+                <div className="p-3">
+                  <p className="text-xs font-bold tracking-widest uppercase mb-1">{p.name}</p>
+                  <p className="text-xs text-foreground/50">${p.price} USD</p>
+                  <div className="flex gap-1 flex-wrap mt-2">
+                    {p.sizes.map(s => <span key={s} className="text-[9px] border border-border/30 px-1.5 py-0.5 text-foreground/40">{s}</span>)}
+                  </div>
+                </div>
+              </Link>
             </motion.div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Products Section */}
-      <section className="py-16 lg:py-24">
-        <div className="container mx-auto px-4 lg:px-8">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-10">
-            <div className="flex items-center gap-4">
-              <h2 className="font-sans text-xl lg:text-2xl font-bold tracking-[0.1em] uppercase text-foreground">
-                Piezas de la colección
-              </h2>
-              <div className="w-12 h-px bg-foreground" />
+      {/* TRUST */}
+      <section className="bg-card/20 border-t border-border/20 py-6 px-6 lg:px-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { icon: "🌍", t: "Envíos a todo el mundo", s: "Rápidos y seguros." },
+            { icon: "✦", t: "Calidad Premium", s: "Materiales seleccionados." },
+            { icon: "🔒", t: "Pagos seguros", s: "Paga como prefieras." },
+            { icon: "◆", t: "Empaque Exclusivo", s: "Listo para coleccionar." },
+          ].map((t, i) => (
+            <div key={i} className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full border border-red-600/50 flex items-center justify-center text-sm flex-shrink-0">{t.icon}</div>
+              <div>
+                <p className="text-[10px] font-bold tracking-widest uppercase">{t.t}</p>
+                <p className="text-[10px] text-foreground/35">{t.s}</p>
+              </div>
             </div>
-
-            {/* Sort Dropdown */}
-            <div className="relative">
-              <button className="flex items-center gap-2 px-4 py-2 bg-secondary text-foreground text-sm tracking-wider uppercase rounded-sm">
-                <span>Ordenar por</span>
-                <span className="hidden sm:inline text-muted-foreground">Más recientes</span>
-                <ChevronDown className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Products Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-6">
-            {collectionProducts.map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} />
-            ))}
-          </div>
+          ))}
         </div>
       </section>
 
-      <BenefitsBar />
       <Footer />
       <WhatsAppButton />
     </main>
-  )
-}
-
-function StarDecoration({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 16 16" className={className} fill="currentColor">
-      <path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5L8 0Z" />
-    </svg>
-  )
-}
-
-function StarIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-      <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
-    </svg>
   )
 }
