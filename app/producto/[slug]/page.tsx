@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, use } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, Truck, Shield, RefreshCw, Package } from "lucide-react"
@@ -100,8 +100,9 @@ const allProducts: Record<string, {
   },
 }
 
-export default function ProductPage({ params }: { params: { slug: string } }) {
-  const product = allProducts[params.slug]
+export default function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params)
+  const product = allProducts[slug]
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [openAccordion, setOpenAccordion] = useState<string | null>(null)
@@ -116,7 +117,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
     if (!selectedSize) { alert("Por favor selecciona una talla"); return }
     if (typeof window !== "undefined") {
       const cart = JSON.parse(localStorage.getItem("mirr-cart") || "[]")
-      cart.push({ slug: params.slug, name: product.name, price: product.price, currency: product.currency, size: selectedSize, image: product.images[0] })
+      cart.push({ slug: slug, name: product.name, price: product.price, currency: product.currency, size: selectedSize, image: product.images[0] })
       localStorage.setItem("mirr-cart", JSON.stringify(cart))
       window.location.href = "/carrito"
     }
