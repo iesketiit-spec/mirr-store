@@ -13,30 +13,12 @@ import { WhatsAppButton } from "@/components/ui/whatsapp-button"
 const collections = [
   {
     id: "medellin",
-    name: "Medellín Collection",
+    name: "Medellin Collection",
     year: "2026",
-    description: "Inspirada en las calles de Medellín. Cada pieza es un homenaje a la cultura, al barrio y a nuestra esencia.",
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/d113971e-e45b-40e9-a960-80b91af0a30f.jpeg",
+    description: "Inspirada en las calles de Medellin. Cada pieza es un homenaje a la cultura, al barrio y a nuestra esencia. Hoodies, camisetas, pantalones y conjuntos disenados para destacar.",
+    image: "/tee-medellin.jpeg",
     href: "/colecciones/medellin",
     isNew: true,
-  },
-  {
-    id: "gothic",
-    name: "Gothic Collection",
-    year: "2025",
-    description: "Oscuridad, actitud y diseño premium. La colección que definió nuestro estilo.",
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/f075a691-5216-446f-90b4-e0295d6df6c5.jpeg",
-    href: "/colecciones/gothic",
-    isNew: false,
-  },
-  {
-    id: "archive",
-    name: "Archive",
-    year: "2020-2024",
-    description: "Piezas icónicas de nuestras colecciones anteriores. El legado MIRR.",
-    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1b58c61b-559d-4f87-b870-55a051b9d511.jpeg",
-    href: "/colecciones/archive",
-    isNew: false,
   },
 ]
 
@@ -70,7 +52,7 @@ export default function ColeccionesPage() {
             transition={{ delay: 0.2 }}
             className="text-muted-foreground text-base lg:text-lg max-w-lg"
           >
-            Cada colección cuenta una historia. Descubre las piezas que han definido el camino de MIRR.
+            Cada coleccion cuenta una historia. Descubre las piezas que definen el estilo MIRR.
           </motion.p>
         </div>
       </section>
@@ -88,6 +70,38 @@ export default function ColeccionesPage() {
               />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 lg:py-24 border-t border-border">
+        <div className="container mx-auto px-4 lg:px-8 text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-sans text-3xl lg:text-4xl font-bold tracking-tight text-foreground mb-4"
+          >
+            Explora toda la tienda
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-muted-foreground max-w-lg mx-auto mb-8"
+          >
+            Descubre hoodies, camisetas, pantalones y conjuntos. Todas las piezas con envio a Colombia y Ecuador.
+          </motion.p>
+          <Link href="/tienda">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-8 py-4 bg-foreground text-background font-sans text-sm tracking-[0.15em] uppercase hover:bg-foreground/90 transition-colors"
+            >
+              Ver todos los productos
+            </motion.button>
+          </Link>
         </div>
       </section>
 
@@ -163,7 +177,7 @@ function CollectionCard({ collection, index, isReversed }: CollectionCardProps) 
                     exit={{ y: 20, opacity: 0 }}
                     className="flex items-center gap-2 px-6 py-3 bg-foreground text-background text-sm tracking-[0.15em] uppercase"
                   >
-                    Ver colección
+                    Ver coleccion
                     <ArrowRight className="h-4 w-4" />
                   </motion.span>
                 </motion.div>

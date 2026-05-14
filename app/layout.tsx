@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Oswald, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { CartProvider } from '@/lib/cart-context'
 import './globals.css'
 
 const oswald = Oswald({ 
@@ -16,12 +17,12 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'MIRR | Streetwear Premium - Diseño con Actitud',
-  description: 'MIRR - Más que ropa, es actitud. Streetwear premium nacido en Medellín. Diseñamos para los que rompen las reglas. Envíos a todo el mundo.',
-  keywords: ['streetwear', 'MIRR', 'Medellín', 'gothic', 'urban fashion', 'premium clothing', 'hoodies', 'ropa urbana'],
+  title: 'MIRR | Streetwear Premium - Diseno con Actitud',
+  description: 'MIRR - Mas que ropa, es actitud. Streetwear premium nacido en Medellin. Disenamos para los que rompen las reglas. Envios a Colombia y Ecuador.',
+  keywords: ['streetwear', 'MIRR', 'Medellin', 'urban fashion', 'premium clothing', 'hoodies', 'ropa urbana', 'Colombia', 'Ecuador'],
   openGraph: {
     title: 'MIRR | Streetwear Premium',
-    description: 'Más que ropa, es actitud. Streetwear premium nacido en Medellín.',
+    description: 'Mas que ropa, es actitud. Streetwear premium nacido en Medellin.',
     type: 'website',
   },
 }
@@ -41,9 +42,11 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${oswald.variable} ${inter.variable} bg-background`} suppressHydrationWarning>
       <body className="font-serif antialiased overflow-x-hidden">
-        <div className="grain-overlay" aria-hidden="true" />
-        {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        <CartProvider>
+          <div className="grain-overlay" aria-hidden="true" />
+          {children}
+          {process.env.NODE_ENV === 'production' && <Analytics />}
+        </CartProvider>
       </body>
     </html>
   )

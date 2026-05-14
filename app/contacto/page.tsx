@@ -19,19 +19,19 @@ const contactInfo = [
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "+57 300 123 4567",
-    href: "https://wa.me/573001234567",
+    value: "+57 320 718 2846",
+    href: "https://wa.me/573207182846",
   },
   {
     icon: Instagram,
     label: "Instagram",
-    value: "@mirr.co",
-    href: "https://instagram.com/mirr.co",
+    value: "@mirr.clt",
+    href: "https://instagram.com/mirr.clt",
   },
   {
     icon: MapPin,
-    label: "Ubicación",
-    value: "Medellín, Colombia",
+    label: "Ubicacion",
+    value: "Medellin, Colombia",
     href: null,
   },
 ]

@@ -1,91 +1,24 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ArrowLeft, ArrowRight, Minus, Plus, X, Trash2, Globe, Shield, Package, RefreshCw, Tag, HelpCircle, Truck } from "lucide-react"
+import { ArrowLeft, ArrowRight, Minus, Plus, X, Trash2, Globe, Shield, Package, RefreshCw } from "lucide-react"
 import { TopBar } from "@/components/layout/top-bar"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { WhatsAppButton } from "@/components/ui/whatsapp-button"
-
-interface CartItem {
-  id: string
-  name: string
-  price: number
-  currency: string
-  image: string
-  color: string
-  size: string
-  quantity: number
-}
-
-const initialCartItems: CartItem[] = [
-  {
-    id: "1",
-    name: "Hoodie Gothic",
-    price: 175000,
-    currency: "COP",
-    image: "/hoodie-gothic-1.jpeg",
-    color: "Negro",
-    size: "L",
-    quantity: 1,
-  },
-  {
-    id: "2",
-    name: "Pants Gothic",
-    price: 165000,
-    currency: "COP",
-    image: "/hoodie-gothic-1.jpeg",
-    color: "Negro",
-    size: "L",
-    quantity: 1,
-  },
-  {
-    id: "3",
-    name: "Cap Gothic",
-    price: 80000,
-    currency: "COP",
-    image: "/hoodie-gothic-1.jpeg",
-    color: "Negro",
-    size: "Única",
-    quantity: 1,
-  },
-]
+import { useCart } from "@/lib/cart-context"
 
 const benefits = [
-  { icon: Globe, title: "Envíos a todo el mundo", description: "Rápidos y seguros." },
+  { icon: Globe, title: "Envios a Colombia y Ecuador", description: "$10 USD" },
   { icon: Shield, title: "Pagos seguros", description: "Paga como prefieras." },
   { icon: Package, title: "Empaque exclusivo", description: "Tu pedido, nuestra esencia." },
-  { icon: RefreshCw, title: "Cambios y devoluciones", description: "Fácil y sin complicaciones." },
+  { icon: RefreshCw, title: "Cambios y devoluciones", description: "30 dias para cambios." },
 ]
 
 export default function CarritoPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems)
-
-  const updateQuantity = (id: string, delta: number) => {
-    setCartItems((items) =>
-      items.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
-    )
-  }
-
-  const removeItem = (id: string) => {
-    setCartItems((items) => items.filter((item) => item.id !== id))
-  }
-
-  const clearCart = () => {
-    setCartItems([])
-  }
-
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  )
+  const { items, updateQuantity, removeItem, clearCart, subtotal, shippingCost, total } = useCart()
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("es-CO", {
@@ -129,14 +62,14 @@ export default function CarritoPage() {
             </Link>
           </div>
 
-          {cartItems.length === 0 ? (
+          {items.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-center py-16"
             >
               <p className="text-muted-foreground text-lg mb-6">
-                Tu carrito está vacío
+                Tu carrito esta vacio
               </p>
               <Link href="/tienda">
                 <motion.button
@@ -153,11 +86,11 @@ export default function CarritoPage() {
               {/* Cart Items */}
               <div className="lg:col-span-2">
                 <p className="text-sm text-muted-foreground mb-6">
-                  {cartItems.length} productos
+                  {items.length} {items.length === 1 ? "producto" : "productos"}
                 </p>
 
                 <div className="space-y-6">
-                  {cartItems.map((item, index) => (
+                  {items.map((item, index) => (
                     <motion.div
                       key={item.id}
                       initial={{ opacity: 0, y: 20 }}
@@ -166,7 +99,7 @@ export default function CarritoPage() {
                       className="flex gap-4 lg:gap-6 p-4 lg:p-6 border border-border bg-card/30"
                     >
                       {/* Image */}
-                      <Link href={`/producto/${item.id}`} className="flex-shrink-0">
+                      <Link href={`/producto/${item.slug}`} className="flex-shrink-0">
                         <div className="relative w-24 h-24 lg:w-32 lg:h-32 bg-card">
                           <Image
                             src={item.image}
@@ -180,7 +113,7 @@ export default function CarritoPage() {
                       {/* Details */}
                       <div className="flex-1 flex flex-col lg:flex-row lg:items-start lg:justify-between">
                         <div className="flex-1">
-                          <Link href={`/producto/${item.id}`}>
+                          <Link href={`/producto/${item.slug}`}>
                             <h3 className="font-sans text-base lg:text-lg font-semibold tracking-wider uppercase text-foreground hover:text-accent transition-colors">
                               {item.name}
                             </h3>
@@ -201,7 +134,7 @@ export default function CarritoPage() {
                           {/* Quantity */}
                           <div className="flex items-center gap-3 border border-border">
                             <button
-                              onClick={() => updateQuantity(item.id, -1)}
+                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
                               className="p-2 text-muted-foreground hover:text-foreground transition-colors"
                             >
                               <Minus className="h-4 w-4" />
@@ -210,7 +143,7 @@ export default function CarritoPage() {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => updateQuantity(item.id, 1)}
+                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
                               className="p-2 text-muted-foreground hover:text-foreground transition-colors"
                             >
                               <Plus className="h-4 w-4" />
@@ -264,12 +197,14 @@ export default function CarritoPage() {
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground">Subtotal</span>
                       <span className="text-foreground font-semibold">
-                        ${formatPrice(subtotal)} COP
+                        ${formatPrice(subtotal)} USD
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Envío</span>
-                      <span className="text-accent font-semibold">GRATIS</span>
+                      <span className="text-muted-foreground">Envio (Colombia/Ecuador)</span>
+                      <span className="text-foreground font-semibold">
+                        ${formatPrice(shippingCost)} USD
+                      </span>
                     </div>
                   </div>
 
@@ -278,7 +213,7 @@ export default function CarritoPage() {
                       Total
                     </span>
                     <span className="text-xl font-bold text-foreground">
-                      ${formatPrice(subtotal)} COP
+                      ${formatPrice(total)} USD
                     </span>
                   </div>
 
@@ -291,10 +226,10 @@ export default function CarritoPage() {
                     <Globe className="h-8 w-8 text-accent" />
                     <div>
                       <p className="text-sm font-semibold tracking-wider uppercase text-accent">
-                        Envíos a todo el mundo
+                        Envios a Colombia y Ecuador
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        Rápidos y seguros.
+                        $10 USD - 5 a 10 dias habiles
                       </p>
                     </div>
                   </div>
@@ -317,7 +252,7 @@ export default function CarritoPage() {
 
                   {/* Payment Icons */}
                   <div className="flex items-center justify-center gap-3 mt-4">
-                    {["visa", "mastercard", "amex", "paypal", "applepay"].map((payment) => (
+                    {["visa", "mastercard", "amex", "paypal"].map((payment) => (
                       <div
                         key={payment}
                         className="w-12 h-8 bg-secondary/50 rounded flex items-center justify-center text-xs text-muted-foreground uppercase"
@@ -325,31 +260,6 @@ export default function CarritoPage() {
                         {payment.slice(0, 4)}
                       </div>
                     ))}
-                  </div>
-
-                  {/* Additional Info */}
-                  <div className="mt-6 pt-6 border-t border-border space-y-4">
-                    <button className="flex items-center justify-between w-full text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      <div className="flex items-center gap-2">
-                        <Truck className="h-4 w-4" />
-                        <span className="tracking-wider uppercase">Calcula tu envío</span>
-                      </div>
-                      <Plus className="h-4 w-4" />
-                    </button>
-                    <button className="flex items-center justify-between w-full text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      <div className="flex items-center gap-2">
-                        <Tag className="h-4 w-4" />
-                        <span className="tracking-wider uppercase">Cupón de descuento</span>
-                      </div>
-                      <Plus className="h-4 w-4" />
-                    </button>
-                    <button className="flex items-center justify-between w-full text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      <div className="flex items-center gap-2">
-                        <HelpCircle className="h-4 w-4" />
-                        <span className="tracking-wider uppercase">¿Necesitas ayuda?</span>
-                      </div>
-                      <Plus className="h-4 w-4" />
-                    </button>
                   </div>
                 </motion.div>
               </div>
