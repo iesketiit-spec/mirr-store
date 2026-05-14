@@ -10,9 +10,9 @@ import { Footer } from "@/components/layout/footer"
 import { WhatsAppButton } from "@/components/ui/whatsapp-button"
 
 const heroSlides = [
-  { image: "/hoodie-gothic-3.jpeg", line1: "Más que ropa,", line2: "es ", accent: "Actitud.", sub: "Diseñamos para los que rompen las reglas, para los que viven el streetwear con identidad y sin miedo a ser diferentes.", btn1: "Ver colecciones", btn1href: "/tienda", btn2: "Ver Lookbook", btn2href: "/lookbook" },
+  { image: "/hoodie-gothic-3.jpeg", line1: "Mas que ropa,", line2: "es ", accent: "Actitud.", sub: "Disenamos para los que rompen las reglas, para los que viven el streetwear con identidad y sin miedo a ser diferentes.", btn1: "Ver colecciones", btn1href: "/tienda", btn2: "Ver Lookbook", btn2href: "/colecciones/medellin" },
   { image: "/hoodie-gothic-2.jpeg", line1: "MIRR no es moda.", line2: "es ", accent: "Actitud.", sub: "Ropa para los que rompen las reglas.", btn1: "Ver colecciones", btn1href: "/tienda", btn2: "Nuestra historia", btn2href: "/sobre-mirr" },
-  { image: "/tee-medellin.jpeg", line1: "Nacido en Medellín.", line2: "Hecho para ", accent: "Destacar.", sub: "Cada pieza, un homenaje a nuestra ciudad y nuestra cultura.", btn1: "Colección Medellín", btn1href: "/colecciones/medellin", btn2: "Ver lookbook", btn2href: "/lookbook" },
+  { image: "/tee-medellin.jpeg", line1: "Nacido en Medellin.", line2: "Hecho para ", accent: "Destacar.", sub: "Cada pieza, un homenaje a nuestra ciudad y nuestra cultura.", btn1: "Coleccion Medellin", btn1href: "/colecciones/medellin", btn2: "Ver lookbook", btn2href: "/colecciones/medellin" },
 ]
 
 const featuredProducts = [
@@ -25,10 +25,10 @@ const featuredProducts = [
 ]
 
 const trustItems = [
-  { icon: "🌍", title: "Envíos a todo el mundo", sub: "Rápidos y seguros." },
+  { icon: "🚚", title: "Envios a CO y EC", sub: "$10 USD - Rapidos y seguros." },
   { icon: "🛡", title: "Calidad Premium", sub: "Materiales seleccionados." },
   { icon: "🔒", title: "Pagos seguros", sub: "Paga como prefieras." },
-  { icon: "♾", title: "Diseños exclusivos", sub: "Ediciones limitadas." },
+  { icon: "♾", title: "Disenos exclusivos", sub: "Ediciones limitadas." },
 ]
 
 export default function HomePage() {

@@ -3,6 +3,7 @@
 import { useState, use } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { ChevronRight, Truck, Shield, RefreshCw, Package } from "lucide-react"
 import { TopBar } from "@/components/layout/top-bar"
 import { Header } from "@/components/layout/header"
@@ -108,6 +109,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [openAccordion, setOpenAccordion] = useState<string | null>(null)
   const { addItem } = useCart()
+  const router = useRouter()
 
   if (!product) return (
     <main className="min-h-screen bg-background flex items-center justify-center">
@@ -126,7 +128,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
       color: "Negro",
       size: selectedSize
     })
-    window.location.href = "/carrito"
+    router.push("/carrito")
   }
 
   const handleBuyNow = () => {
@@ -140,7 +142,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
       color: "Negro",
       size: selectedSize
     })
-    window.location.href = "/checkout"
+    router.push("/checkout")
   }
 
   return (
