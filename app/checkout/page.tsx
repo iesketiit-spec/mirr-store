@@ -4,57 +4,31 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ArrowLeft, Lock, Globe, Shield, Package, RefreshCw, Phone, CreditCard, Building, Check } from "lucide-react"
+import { ArrowLeft, Lock, Globe, Shield, Package, Check, CreditCard, Building } from "lucide-react"
 import { TopBar } from "@/components/layout/top-bar"
 import { WhatsAppButton } from "@/components/ui/whatsapp-button"
 import { MirrLogo } from "@/components/ui/mirr-logo"
+import { useCart } from "@/lib/cart-context"
 
 const checkoutSteps = [
   { id: 1, name: "Carrito" },
-  { id: 2, name: "Envío" },
+  { id: 2, name: "Envio" },
   { id: 3, name: "Pago" },
-  { id: 4, name: "Confirmación" },
-]
-
-const orderItems = [
-  {
-    id: "1",
-    name: "Hoodie Gothic",
-    price: 175000,
-    image: "/hoodie-gothic-1.jpeg",
-    color: "Negro",
-    size: "L",
-    quantity: 1,
-  },
-  {
-    id: "2",
-    name: "Pants Gothic",
-    price: 165000,
-    image: "/hoodie-gothic-1.jpeg",
-    color: "Negro",
-    size: "L",
-    quantity: 1,
-  },
-  {
-    id: "3",
-    name: "Cap Gothic",
-    price: 80000,
-    image: "/hoodie-gothic-1.jpeg",
-    color: "Negro",
-    size: "Única",
-    quantity: 1,
-  },
+  { id: 4, name: "Confirmacion" },
 ]
 
 const paymentMethods = [
-  { id: "card", name: "Tarjeta de crédito / débito", icon: CreditCard },
+  { id: "card", name: "Tarjeta de credito / debito", icon: CreditCard },
   { id: "paypal", name: "PayPal", icon: () => <span className="text-sm font-bold">P</span> },
   { id: "transfer", name: "Transferencia bancaria", icon: Building },
 ]
 
 export default function CheckoutPage() {
-  const [currentStep] = useState(3) // Payment step
+  const { items, subtotal, shippingCost, total, clearCart } = useCart()
+  const [currentStep] = useState(3)
   const [paymentMethod, setPaymentMethod] = useState("card")
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [orderComplete, setOrderComplete] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     phone: "",
@@ -72,8 +46,6 @@ export default function CheckoutPage() {
     saveCard: false,
   })
 
-  const subtotal = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("es-CO", {
       style: "decimal",
@@ -87,6 +59,66 @@ export default function CheckoutPage() {
       ...prev,
       [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsProcessing(true)
+    
+    // Simulate payment processing
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
+    setIsProcessing(false)
+    setOrderComplete(true)
+    clearCart()
+  }
+
+  if (items.length === 0 && !orderComplete) {
+    return (
+      <main className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-muted-foreground mb-4">Tu carrito esta vacio</p>
+          <Link href="/tienda" className="text-accent hover:underline">
+            Ir a la tienda
+          </Link>
+        </div>
+      </main>
+    )
+  }
+
+  if (orderComplete) {
+    return (
+      <main className="min-h-screen bg-background">
+        <TopBar />
+        <div className="container mx-auto px-4 lg:px-8 py-24 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-md mx-auto"
+          >
+            <div className="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Check className="h-10 w-10 text-accent" />
+            </div>
+            <h1 className="font-sans text-3xl font-bold tracking-tight text-foreground mb-4">
+              Pedido Confirmado
+            </h1>
+            <p className="text-muted-foreground mb-8">
+              Gracias por tu compra. Recibiras un correo con los detalles de tu pedido y el numero de seguimiento una vez despachado.
+            </p>
+            <Link href="/tienda">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-8 py-4 bg-foreground text-background font-sans text-sm tracking-[0.15em] uppercase"
+              >
+                Seguir comprando
+              </motion.button>
+            </Link>
+          </motion.div>
+        </div>
+        <WhatsAppButton />
+      </main>
+    )
   }
 
   return (
@@ -161,10 +193,10 @@ export default function CheckoutPage() {
                   PAGO
                 </h1>
                 <p className="text-muted-foreground mb-8">
-                  Completa tus datos y elige tu método de pago preferido.
+                  Completa tus datos y elige tu metodo de pago preferido.
                 </p>
 
-                <form className="space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-8">
                   {/* Contact Info */}
                   <div>
                     <h2 className="text-sm font-semibold tracking-[0.15em] uppercase text-foreground mb-4">
@@ -173,28 +205,30 @@ export default function CheckoutPage() {
                     <div className="space-y-4">
                       <div>
                         <label className="block text-xs text-muted-foreground mb-2">
-                          Correo electrónico *
+                          Correo electronico *
                         </label>
                         <input
                           type="email"
                           name="email"
+                          required
                           value={formData.email}
                           onChange={handleInputChange}
                           placeholder="ejemplo@correo.com"
-                          className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+                          className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-base"
                         />
                       </div>
                       <div>
                         <label className="block text-xs text-muted-foreground mb-2">
-                          Teléfono (opcional)
+                          Telefono *
                         </label>
                         <input
                           type="tel"
                           name="phone"
+                          required
                           value={formData.phone}
                           onChange={handleInputChange}
-                          placeholder="+57 300 123 4567"
-                          className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+                          placeholder="+57 320 123 4567"
+                          className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-base"
                         />
                       </div>
                     </div>
@@ -203,7 +237,7 @@ export default function CheckoutPage() {
                   {/* Shipping Address */}
                   <div>
                     <h2 className="text-sm font-semibold tracking-[0.15em] uppercase text-foreground mb-4">
-                      2. Dirección de envío
+                      2. Direccion de envio
                     </h2>
                     <div className="space-y-4">
                       <div>
@@ -213,57 +247,41 @@ export default function CheckoutPage() {
                         <input
                           type="text"
                           name="name"
+                          required
                           value={formData.name}
                           onChange={handleInputChange}
-                          placeholder="Juan Pérez"
-                          className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+                          placeholder="Juan Perez"
+                          className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-base"
                         />
                       </div>
                       <div>
                         <label className="block text-xs text-muted-foreground mb-2">
-                          Dirección *
+                          Direccion *
                         </label>
                         <input
                           type="text"
                           name="address"
+                          required
                           value={formData.address}
                           onChange={handleInputChange}
                           placeholder="Calle 123 #45-67"
-                          className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+                          className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-base"
                         />
                       </div>
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-xs text-muted-foreground mb-2">
-                            País *
+                            Pais *
                           </label>
                           <select
                             name="country"
+                            required
                             value={formData.country}
                             onChange={handleInputChange}
-                            className="w-full px-4 py-3 bg-input border border-border text-foreground focus:outline-none focus:ring-1 focus:ring-accent appearance-none"
+                            className="w-full px-4 py-3 bg-input border border-border text-foreground focus:outline-none focus:ring-1 focus:ring-accent appearance-none text-base"
                           >
                             <option value="Colombia">Colombia</option>
-                            <option value="México">México</option>
-                            <option value="Argentina">Argentina</option>
-                            <option value="Chile">Chile</option>
-                            <option value="España">España</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="block text-xs text-muted-foreground mb-2">
-                            Departamento / Estado *
-                          </label>
-                          <select
-                            name="state"
-                            value={formData.state}
-                            onChange={handleInputChange}
-                            className="w-full px-4 py-3 bg-input border border-border text-foreground focus:outline-none focus:ring-1 focus:ring-accent appearance-none"
-                          >
-                            <option value="">Seleccionar</option>
-                            <option value="Antioquia">Antioquia</option>
-                            <option value="Cundinamarca">Cundinamarca</option>
-                            <option value="Valle del Cauca">Valle del Cauca</option>
+                            <option value="Ecuador">Ecuador</option>
                           </select>
                         </div>
                         <div>
@@ -273,49 +291,51 @@ export default function CheckoutPage() {
                           <input
                             type="text"
                             name="city"
+                            required
                             value={formData.city}
                             onChange={handleInputChange}
-                            placeholder="Medellín"
-                            className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+                            placeholder="Medellin"
+                            className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-base"
                           />
                         </div>
                       </div>
-                      <div className="w-1/3">
-                        <label className="block text-xs text-muted-foreground mb-2">
-                          Código postal *
-                        </label>
-                        <input
-                          type="text"
-                          name="zip"
-                          value={formData.zip}
-                          onChange={handleInputChange}
-                          placeholder="050001"
-                          className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
-                        />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs text-muted-foreground mb-2">
+                            Departamento / Provincia *
+                          </label>
+                          <input
+                            type="text"
+                            name="state"
+                            required
+                            value={formData.state}
+                            onChange={handleInputChange}
+                            placeholder="Antioquia"
+                            className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-base"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-muted-foreground mb-2">
+                            Codigo postal
+                          </label>
+                          <input
+                            type="text"
+                            name="zip"
+                            value={formData.zip}
+                            onChange={handleInputChange}
+                            placeholder="050001"
+                            className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-base"
+                          />
+                        </div>
                       </div>
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          name="saveAddress"
-                          checked={formData.saveAddress}
-                          onChange={handleInputChange}
-                          className="w-5 h-5 border border-border bg-input accent-accent"
-                        />
-                        <span className="text-sm text-muted-foreground">
-                          Guardar esta dirección para futuras compras
-                        </span>
-                      </label>
                     </div>
                   </div>
 
                   {/* Payment Method */}
                   <div>
-                    <h2 className="text-sm font-semibold tracking-[0.15em] uppercase text-foreground mb-2">
-                      3. Método de pago
+                    <h2 className="text-sm font-semibold tracking-[0.15em] uppercase text-foreground mb-4">
+                      3. Metodo de pago
                     </h2>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Selecciona tu método de pago preferido.
-                    </p>
 
                     <div className="flex flex-wrap gap-3 mb-6">
                       {paymentMethods.map((method) => (
@@ -339,54 +359,45 @@ export default function CheckoutPage() {
                       <div className="space-y-4 p-4 border border-border bg-card/30">
                         <div>
                           <label className="block text-xs text-muted-foreground mb-2">
-                            Número de tarjeta *
+                            Numero de tarjeta *
                           </label>
-                          <div className="relative">
-                            <input
-                              type="text"
-                              name="cardNumber"
-                              value={formData.cardNumber}
-                              onChange={handleInputChange}
-                              placeholder="1234 5678 9012 3456"
-                              className="w-full px-4 py-3 pr-24 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
-                            />
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
-                              {["VISA", "MC", "AMEX"].map((card) => (
-                                <div
-                                  key={card}
-                                  className="w-8 h-5 bg-secondary rounded flex items-center justify-center text-[8px] text-muted-foreground"
-                                >
-                                  {card}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
+                          <input
+                            type="text"
+                            name="cardNumber"
+                            required
+                            value={formData.cardNumber}
+                            onChange={handleInputChange}
+                            placeholder="1234 5678 9012 3456"
+                            className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-base"
+                          />
                         </div>
-                        <div className="grid grid-cols-3 gap-4">
-                          <div className="col-span-1">
-                            <label className="block text-xs text-muted-foreground mb-2">
-                              Nombre en la tarjeta *
-                            </label>
-                            <input
-                              type="text"
-                              name="cardName"
-                              value={formData.cardName}
-                              onChange={handleInputChange}
-                              placeholder="Juan Pérez"
-                              className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
-                            />
-                          </div>
+                        <div>
+                          <label className="block text-xs text-muted-foreground mb-2">
+                            Nombre en la tarjeta *
+                          </label>
+                          <input
+                            type="text"
+                            name="cardName"
+                            required
+                            value={formData.cardName}
+                            onChange={handleInputChange}
+                            placeholder="Juan Perez"
+                            className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-base"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
                           <div>
                             <label className="block text-xs text-muted-foreground mb-2">
-                              Fecha de vencimiento *
+                              Vencimiento *
                             </label>
                             <input
                               type="text"
                               name="cardExpiry"
+                              required
                               value={formData.cardExpiry}
                               onChange={handleInputChange}
                               placeholder="MM / AA"
-                              className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+                              className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-base"
                             />
                           </div>
                           <div>
@@ -396,25 +407,14 @@ export default function CheckoutPage() {
                             <input
                               type="text"
                               name="cardCvv"
+                              required
                               value={formData.cardCvv}
                               onChange={handleInputChange}
                               placeholder="123"
-                              className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
+                              className="w-full px-4 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent text-base"
                             />
                           </div>
                         </div>
-                        <label className="flex items-center gap-3 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name="saveCard"
-                            checked={formData.saveCard}
-                            onChange={handleInputChange}
-                            className="w-5 h-5 border border-border bg-input accent-accent"
-                          />
-                          <span className="text-sm text-muted-foreground">
-                            Guardar tarjeta para futuras compras
-                          </span>
-                        </label>
                       </div>
                     )}
                   </div>
@@ -431,18 +431,28 @@ export default function CheckoutPage() {
 
                     <motion.button
                       type="submit"
-                      whileHover={{ scale: 1.01 }}
-                      whileTap={{ scale: 0.99 }}
-                      className="w-full sm:w-auto flex items-center justify-center gap-3 px-12 py-4 bg-foreground text-background font-sans text-sm tracking-[0.15em] uppercase hover:bg-foreground/90 transition-colors"
+                      disabled={isProcessing}
+                      whileHover={{ scale: isProcessing ? 1 : 1.01 }}
+                      whileTap={{ scale: isProcessing ? 1 : 0.99 }}
+                      className="w-full sm:w-auto flex items-center justify-center gap-3 px-12 py-4 bg-foreground text-background font-sans text-sm tracking-[0.15em] uppercase hover:bg-foreground/90 transition-colors disabled:opacity-50"
                     >
-                      <Lock className="h-4 w-4" />
-                      Pagar ${formatPrice(subtotal)} COP
+                      {isProcessing ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-background/30 border-t-background rounded-full animate-spin" />
+                          Procesando...
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="h-4 w-4" />
+                          Pagar ${formatPrice(total)} USD
+                        </>
+                      )}
                     </motion.button>
                   </div>
 
                   <p className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                    <Lock className="h-3 w-3" />
-                    Tus datos están protegidos con encriptación SSL
+                    <Shield className="h-4 w-4" />
+                    Pago seguro encriptado con SSL
                   </p>
                 </form>
               </motion.div>
@@ -453,16 +463,15 @@ export default function CheckoutPage() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
                 className="lg:sticky lg:top-8 p-6 bg-card border border-border"
               >
                 <h2 className="font-sans text-lg font-bold tracking-[0.15em] uppercase text-foreground mb-6">
                   Resumen del pedido
                 </h2>
 
-                {/* Order Items */}
+                {/* Items */}
                 <div className="space-y-4 mb-6">
-                  {orderItems.map((item) => (
+                  {items.map((item) => (
                     <div key={item.id} className="flex gap-4">
                       <div className="relative w-16 h-16 bg-secondary flex-shrink-0">
                         <Image
@@ -471,79 +480,54 @@ export default function CheckoutPage() {
                           fill
                           className="object-cover"
                         />
+                        <span className="absolute -top-2 -right-2 w-5 h-5 bg-accent text-accent-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                          {item.quantity}
+                        </span>
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-sm font-semibold tracking-wider uppercase text-foreground">
-                          {item.name}
-                        </h3>
-                        <p className="text-xs text-muted-foreground">
-                          {item.color} - {item.size}
-                        </p>
-                        <p className="text-sm text-foreground mt-1">
-                          ${formatPrice(item.price)} COP
-                        </p>
+                        <p className="text-sm font-semibold text-foreground">{item.name}</p>
+                        <p className="text-xs text-muted-foreground">Talla: {item.size}</p>
+                        <p className="text-sm text-foreground mt-1">${formatPrice(item.price * item.quantity)} USD</p>
                       </div>
-                      <span className="text-xs text-muted-foreground">
-                        x{item.quantity}
-                      </span>
                     </div>
                   ))}
                 </div>
 
-                {/* Totals */}
-                <div className="space-y-3 py-4 border-t border-border">
-                  <div className="flex items-center justify-between text-sm">
+                <div className="border-t border-border pt-4 space-y-3">
+                  <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span className="text-foreground">${formatPrice(subtotal)} COP</span>
+                    <span className="text-foreground">${formatPrice(subtotal)} USD</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Envío</span>
-                    <span className="text-accent font-semibold">GRATIS</span>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Envio (Colombia/Ecuador)</span>
+                    <span className="text-foreground">${formatPrice(shippingCost)} USD</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Impuestos</span>
-                    <span className="text-foreground">Incluidos</span>
+                  <div className="flex justify-between text-base font-bold pt-3 border-t border-border">
+                    <span className="text-foreground">Total</span>
+                    <span className="text-foreground">${formatPrice(total)} USD</span>
                   </div>
-                </div>
-
-                <div className="flex items-center justify-between py-4 border-t border-border">
-                  <span className="font-sans text-lg font-bold tracking-wider uppercase text-foreground">
-                    Total
-                  </span>
-                  <span className="text-xl font-bold text-foreground">
-                    ${formatPrice(subtotal)} COP
-                  </span>
                 </div>
 
                 {/* Shipping Info */}
-                <div className="flex items-center gap-3 p-4 bg-secondary/30 rounded-sm mt-6">
-                  <Globe className="h-8 w-8 text-accent" />
-                  <div>
-                    <p className="text-sm font-semibold tracking-wider uppercase text-accent">
-                      Envíos a todo el mundo
-                    </p>
-                    <p className="text-xs text-muted-foreground">Rápidos y seguros.</p>
+                <div className="mt-6 p-4 bg-secondary/30 border border-border/50">
+                  <div className="flex items-center gap-3">
+                    <Globe className="h-6 w-6 text-accent" />
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">Envio a Colombia y Ecuador</p>
+                      <p className="text-xs text-muted-foreground">5-10 dias habiles</p>
+                    </div>
                   </div>
                 </div>
 
                 {/* Benefits */}
-                <div className="mt-6 space-y-4">
+                <div className="mt-6 space-y-3">
                   {[
-                    { icon: Shield, title: "Pagos seguros", description: "Paga como prefieras." },
-                    { icon: Package, title: "Empaque exclusivo", description: "Tu pedido, nuestra esencia." },
-                    { icon: RefreshCw, title: "Cambios y devoluciones", description: "Fácil y sin complicaciones." },
-                    { icon: Phone, title: "Atención al cliente", description: "Estamos para ayudarte." },
-                  ].map((benefit) => (
-                    <div key={benefit.title} className="flex items-center gap-3">
-                      <benefit.icon className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <p className="text-sm font-semibold tracking-wider uppercase text-foreground">
-                          {benefit.title}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {benefit.description}
-                        </p>
-                      </div>
+                    { icon: Shield, text: "Pago 100% seguro" },
+                    { icon: Package, text: "Empaque exclusivo MIRR" },
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center gap-3 text-xs text-muted-foreground">
+                      <item.icon className="h-4 w-4" />
+                      {item.text}
                     </div>
                   ))}
                 </div>
@@ -552,75 +536,6 @@ export default function CheckoutPage() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="py-8 border-t border-border">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-            <MirrLogo className="h-8 w-auto" />
-
-            <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
-              <div>
-                <h4 className="text-xs font-semibold tracking-[0.15em] uppercase text-foreground mb-2">
-                  Tienda
-                </h4>
-                <div className="flex gap-4 text-sm text-muted-foreground">
-                  <Link href="/tienda" className="hover:text-foreground transition-colors">Todos los productos</Link>
-                  <Link href="/tienda?categoria=hoodies" className="hover:text-foreground transition-colors">Hoodies</Link>
-                </div>
-              </div>
-              <div>
-                <h4 className="text-xs font-semibold tracking-[0.15em] uppercase text-foreground mb-2">
-                  Colecciones
-                </h4>
-                <div className="flex gap-4 text-sm text-muted-foreground">
-                  <Link href="/colecciones/gothic" className="hover:text-foreground transition-colors">Gothic Collection</Link>
-                  <Link href="/colecciones/medellin" className="hover:text-foreground transition-colors">Medellín Collection</Link>
-                </div>
-              </div>
-              <div>
-                <h4 className="text-xs font-semibold tracking-[0.15em] uppercase text-foreground mb-2">
-                  Ayuda
-                </h4>
-                <div className="flex gap-4 text-sm text-muted-foreground">
-                  <Link href="/ayuda/envios" className="hover:text-foreground transition-colors">Envíos</Link>
-                  <Link href="/ayuda/cambios" className="hover:text-foreground transition-colors">Cambios</Link>
-                </div>
-              </div>
-              <div>
-                <h4 className="text-xs font-semibold tracking-[0.15em] uppercase text-foreground mb-2">
-                  Contacto
-                </h4>
-                <div className="flex gap-4 text-sm text-muted-foreground">
-                  <span>Email: info@mirr.co</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Social */}
-            <div className="flex items-center gap-4">
-              {["instagram", "tiktok", "youtube", "x"].map((social) => (
-                <a
-                  key={social}
-                  href={`https://${social}.com/mirr`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <span className="sr-only">{social}</span>
-                  <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-[10px] uppercase">
-                    {social[0]}
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <p className="text-center text-xs text-muted-foreground mt-8">
-            © {new Date().getFullYear()} MIRR. Todos los derechos reservados.
-          </p>
-        </div>
-      </footer>
 
       <WhatsAppButton />
     </main>

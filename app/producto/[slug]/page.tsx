@@ -3,11 +3,13 @@
 import { useState, use } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { ChevronRight, Truck, Shield, RefreshCw, Package } from "lucide-react"
 import { TopBar } from "@/components/layout/top-bar"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { WhatsAppButton } from "@/components/ui/whatsapp-button"
+import { useCart } from "@/lib/cart-context"
 
 const allProducts: Record<string, {
   name: string; price: number; currency: string; description: string;
@@ -106,6 +108,8 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [openAccordion, setOpenAccordion] = useState<string | null>(null)
+  const { addItem } = useCart()
+  const router = useRouter()
 
   if (!product) return (
     <main className="min-h-screen bg-background flex items-center justify-center">
@@ -115,12 +119,30 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
 
   const handleAddToCart = () => {
     if (!selectedSize) { alert("Por favor selecciona una talla"); return }
-    if (typeof window !== "undefined") {
-      const cart = JSON.parse(localStorage.getItem("mirr-cart") || "[]")
-      cart.push({ slug: slug, name: product.name, price: product.price, currency: product.currency, size: selectedSize, image: product.images[0] })
-      localStorage.setItem("mirr-cart", JSON.stringify(cart))
-      window.location.href = "/carrito"
-    }
+    addItem({
+      slug: slug,
+      name: product.name,
+      price: product.price,
+      currency: product.currency,
+      image: product.images[0],
+      color: "Negro",
+      size: selectedSize
+    })
+    router.push("/carrito")
+  }
+
+  const handleBuyNow = () => {
+    if (!selectedSize) { alert("Por favor selecciona una talla"); return }
+    addItem({
+      slug: slug,
+      name: product.name,
+      price: product.price,
+      currency: product.currency,
+      image: product.images[0],
+      color: "Negro",
+      size: selectedSize
+    })
+    router.push("/checkout")
   }
 
   return (
@@ -175,7 +197,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                   </button>
                 ))}
               </div>
-              <Link href="/tallas" className="text-[10px] tracking-widest text-foreground/30 underline underline-offset-2 block mb-6">Guía de tallas</Link>
+              <Link href="/ayuda/guia-tallas" className="text-[10px] tracking-widest text-foreground/30 underline underline-offset-2 block mb-6">Guia de tallas</Link>
 
               {/* CTA */}
               <div className="flex flex-col gap-3 mb-6">
@@ -184,7 +206,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                   Agregar al carrito
                   <span className="pl-4 border-l border-black/20">${product.price} {product.currency}</span>
                 </button>
-                <button onClick={handleAddToCart}
+                <button onClick={handleBuyNow}
                   className="w-full border border-border/30 text-white py-4 text-xs font-bold tracking-widest uppercase hover:border-white transition-all">
                   Comprar ahora
                 </button>

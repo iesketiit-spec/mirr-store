@@ -3,32 +3,24 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, User, ShoppingBag, Menu, X, ChevronRight, ChevronDown, Globe, Star, Sparkles, ShoppingCart, Mail, BookOpen } from "lucide-react"
+import { Search, User, ShoppingBag, Menu, X, ChevronRight, ChevronDown, Globe, ShoppingCart, Mail, BookOpen, Shirt } from "lucide-react"
 import { MirrLogo } from "@/components/ui/mirr-logo"
+import { useCart } from "@/lib/cart-context"
 
 const navLinks = [
   { href: "/", label: "Inicio" },
   { href: "/tienda", label: "Tienda" },
-  { 
-    href: "/colecciones", 
-    label: "Colecciones",
-    hasDropdown: true,
-    items: [
-      { href: "/colecciones/gothic", label: "Gothic Collection" },
-      { href: "/colecciones/medellin", label: "Medellín Collection" },
-      { href: "/colecciones/archive", label: "Archive" },
-    ]
-  },
+  { href: "/colecciones/medellin", label: "Coleccion" },
   { href: "/sobre-mirr", label: "Sobre MIRR" },
   { href: "/lookbook", label: "Lookbook" },
   { href: "/contacto", label: "Contacto" },
 ]
 
 const mobileNavIcons = [
-  { icon: Sparkles, label: "Inicio" },
+  { icon: Globe, label: "Inicio" },
   { icon: ShoppingCart, label: "Tienda" },
-  { icon: Star, label: "Colecciones" },
-  { icon: Sparkles, label: "Sobre MIRR" },
+  { icon: Shirt, label: "Coleccion" },
+  { icon: BookOpen, label: "Sobre MIRR" },
   { icon: BookOpen, label: "Lookbook" },
   { icon: Mail, label: "Contacto" },
 ]
@@ -36,8 +28,7 @@ const mobileNavIcons = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
-  const [cartCount] = useState(0)
+  const { itemCount } = useCart()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,47 +75,14 @@ export function Header() {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-8">
               {navLinks.map((link) => (
-                <div
-                  key={link.href}
-                  className="relative"
-                  onMouseEnter={() => link.hasDropdown && setActiveDropdown(link.label)}
-                  onMouseLeave={() => setActiveDropdown(null)}
-                >
+                <div key={link.href} className="relative">
                   <Link
                     href={link.href}
                     className="group relative flex items-center gap-1 text-sm tracking-[0.15em] uppercase text-foreground/80 hover:text-foreground transition-colors duration-300"
                   >
                     {link.label}
-                    {link.hasDropdown && (
-                      <ChevronDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-180" />
-                    )}
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full" />
                   </Link>
-                  
-                  {/* Dropdown */}
-                  {link.hasDropdown && (
-                    <AnimatePresence>
-                      {activeDropdown === link.label && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
-                          transition={{ duration: 0.2 }}
-                          className="absolute top-full left-0 mt-2 py-2 min-w-[200px] bg-card/95 backdrop-blur-xl border border-border rounded-sm"
-                        >
-                          {link.items?.map((item) => (
-                            <Link
-                              key={item.href}
-                              href={item.href}
-                              className="block px-4 py-2.5 text-sm tracking-wider uppercase text-foreground/70 hover:text-foreground hover:bg-secondary/50 transition-colors"
-                            >
-                              {item.label}
-                            </Link>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  )}
                 </div>
               ))}
             </nav>
@@ -139,9 +97,9 @@ export function Header() {
               </Link>
               <Link href="/carrito" className="relative text-foreground/80 hover:text-foreground transition-colors">
                 <ShoppingBag className="h-5 w-5" />
-                {cartCount > 0 && (
+                {itemCount > 0 && (
                   <span className="absolute -top-1.5 -right-1.5 h-4 w-4 flex items-center justify-center bg-accent text-[10px] font-bold text-accent-foreground rounded-full">
-                    {cartCount}
+                    {itemCount}
                   </span>
                 )}
               </Link>
@@ -214,24 +172,29 @@ export function Header() {
                   <div className="flex items-center gap-3 p-4 bg-secondary/30 rounded-sm mb-6">
                     <Globe className="h-8 w-8 text-muted-foreground" />
                     <div>
-                      <p className="text-sm font-semibold tracking-wider uppercase text-accent">Envíos a todo el mundo</p>
-                      <p className="text-xs text-muted-foreground">Rápidos y seguros.</p>
+                      <p className="text-sm font-semibold tracking-wider uppercase text-accent">Envios a Colombia y Ecuador</p>
+                      <p className="text-xs text-muted-foreground">$10 USD</p>
                     </div>
                   </div>
                   
                   {/* Social Links */}
                   <div className="flex items-center justify-center gap-6 mb-6">
-                    {["instagram", "tiktok", "youtube", "x"].map((social) => (
-                      <a
-                        key={social}
-                        href={`https://${social}.com/mirr`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-foreground/60 hover:text-foreground transition-colors"
-                      >
-                        <SocialIcon name={social} />
-                      </a>
-                    ))}
+                    <a
+                      href="https://instagram.com/mirr.clt"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground/60 hover:text-foreground transition-colors"
+                    >
+                      <SocialIcon name="instagram" />
+                    </a>
+                    <a
+                      href="https://tiktok.com/@mirr.clt"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground/60 hover:text-foreground transition-colors"
+                    >
+                      <SocialIcon name="tiktok" />
+                    </a>
                   </div>
 
                   <Link
@@ -267,18 +230,6 @@ function SocialIcon({ name }: { name: string }) {
       return (
         <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
           <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-        </svg>
-      )
-    case "youtube":
-      return (
-        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-        </svg>
-      )
-    case "x":
-      return (
-        <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
         </svg>
       )
     default:
