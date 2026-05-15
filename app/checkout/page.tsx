@@ -5,7 +5,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowLeft, Lock, Globe, Shield, Package, Check, CreditCard, Building } from "lucide-react"
-import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js"
+import dynamic from "next/dynamic"
+const PayPalButtons = dynamic(() => import("@paypal/react-paypal-js").then(m => m.PayPalButtons), { ssr: false })
+const PayPalScriptProvider = dynamic(() => import("@paypal/react-paypal-js").then(m => m.PayPalScriptProvider), { ssr: false })
 import { TopBar } from "@/components/layout/top-bar"
 import { WhatsAppButton } from "@/components/ui/whatsapp-button"
 import { MirrLogo } from "@/components/ui/mirr-logo"
